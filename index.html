@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Littlest Lion - Adventure Edition</title>
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+
+    <style>
+        :root {
+            --bg-color: #110f5d;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Lock standard scroll */
+            background-color: var(--bg-color);
+            font-family: 'Palatino', 'Georgia', serif;
+        }
+
+        /* The Main Horizontal Container */
+        .p-storybook__wrapper {
+            display: flex;
+            height: 100vh;
+            width: max-content;
+            will-change: transform;
+        }
+
+        .p-storybook__page {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            flex-shrink: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Page Content Layers */
+        .p-page {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease-out;
+        }
+
+        .p-page__bg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .p-page__bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Shadow Overlay for Depth */
+        .p-page__bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, transparent 20%, var(--bg-color) 150%);
+            transition: opacity 1.5s ease;
+            z-index: 2;
+        }
+
+        /* 3D Objects */
+        .p-page__object {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+            opacity: 0;
+            transform: translate3d(0, 100px, -200px) scale(0.8);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Active State Animations */
+        .p-storybook__page.is-active .p-page__object {
+            opacity: 1;
+            transform: translate3d(0, 0, 0) scale(1);
+        }
+
+        /* Text Styling */
+        .p-storybook__page-text {
+            position: absolute;
+            bottom: 12%;
+            left: 10%;
+            right: 10%;
+            text-align: center;
+            z-index: 10;
+            color: white;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s delay 0.5s;
+            pointer-events: none;
+        }
+
+        .p-storybook__page.is-active .p-storybook__page-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .p-storybook__page-text p {
+            font-size: 2rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .p-storybook__page-text span {
+            opacity: 0;
+            display: inline-block;
+            animation: letter-fade 0.4s forwards;
+        }
+
+        @keyframes letter-fade {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cover & End Pages */
+        .cover-content {
+            text-align: center;
+            color: white;
+            z-index: 5;
+        }
+
+        .cover-content h1 { font-size: 5rem; margin-bottom: 10px; }
+        .cover-content p { font-size: 1.5rem; opacity: 0.7; }
+
+        /* Stars Background */
+        .sky { position: absolute; inset: 0; pointer-events: none; }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <div class="p-storybook__wrapper" id="master-wrapper">
+        
+        <section class="p-storybook__page">
+            <div class="sky" id="star-field"></div>
+            <div class="cover-content">
+                <h1>The Littlest Lion</h1>
+                <p>Scroll down or use your wheel to explore</p>
+            </div>
+        </section>
+
+        <section class="p-storybook__page">
+            <div class="p-page">
+                <div class="p-page__bg">
+                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page1/%E8%83%8C%E6%99%AF.png?raw=true" alt="Forest">
+                </div>
+                <div class="p-page__object">
+                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page1/%E4%BA%BA%E7%89%A9.png?raw=true" alt="Lion">
+                </div>
+                <div class="p-storybook__page-text">
+                    <p>In a hidden corner of the world, a tiny lion began a journey that would change everything.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-storybook__page">
+            <div class="p-page">
+                <div class="p-page__bg">
+                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page2/%E8%83%8C%E6%99%AF.png?raw=true" alt="River">
+                </div>
+                <div class="p-page__object">
+                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page2/%E6%A1%83%E5%A4%AA%E9%83%8E.png?raw=true" alt="Momotaro">
+                </div>
+                <div class="p-storybook__page-text">
+                    <p>He met Momotaro, the brave Peach Boy, who carried dumplings for strength and kindness in his heart.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-storybook__page">
+            <div class="p-page">
+                <div class="p-page__bg">
+                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page3/%E8%83%8C%E6%99%AF.png?raw=true" alt="Clouds">
+                </div>
+                <div class="p-page__object">
+                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page3/%E8%94%A6.png?raw=true" alt="Beanstalk">
+                </div>
+                <div class="p-storybook__page-text">
+                    <p>High above the clouds, Jack showed him that even the smallest explorer can reach the tallest heights.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-storybook__page">
+            <div class="p-page">
+                <div class="p-page__bg">
+                    <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1920&q=80" alt="Village">
+                </div>
+                <div class="p-storybook__page-text">
+                    <p>In a bustling village, a clever tailor proved that wit is far mightier than the strength of a giant.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-storybook__page">
+            <div class="p-page">
+                <div class="p-page__bg">
+                    <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1920&q=80" alt="Lake">
+                </div>
+                <div class="p-storybook__page-text">
+                    <p>A simple act of sharing led to a golden goose, proving that those with kind souls are the truly wealthy ones.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-storybook__page">
+            <div class="cover-content">
+                <h1>Sweet Dreams</h1>
+                <p>The adventure never truly ends as long as you keep dreaming.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const wrapper = document.getElementById('master-wrapper');
+        const pages = document.querySelectorAll('.p-storybook__page');
+        let currentScroll = 0;
+        let targetScroll = 0;
+        const scrollSpeed = 0.8; // Adjust for sensitivity
+
+        // 1. Horizontal Scroll Mapping (Core Fix)
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const maxScroll = (pages.length - 1) * window.innerWidth;
+            
+            // Add vertical delta to our target horizontal position
+            targetScroll += e.deltaY;
+            
+            // Constrain boundaries
+            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+        }, { passive: false });
+
+        // Smooth Lerp Loop
+        function update() {
+            // Smoothly interpolate current scroll to target scroll
+            currentScroll += (targetScroll - currentScroll) * 0.1;
+            
+            // Apply the transformation
+            wrapper.style.transform = `translateX(-${currentScroll}px)`;
+            
+            requestAnimationFrame(update);
+        }
+        update();
+
+        // 2. Intersection Observer for Page Activations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-active');
+                    runTypingAnimation(entry.target);
+                } else {
+                    // We remove active class so animations can replay when coming back
+                    entry.target.classList.remove('is-active');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        pages.forEach(page => observer.observe(page));
+
+        // 3. Typing Effect
+        function runTypingAnimation(page) {
+            const p = page.querySelector('.p-storybook__page-text p');
+            if (!p || p.dataset.animated) return;
+
+            const text = p.innerText;
+            p.innerHTML = '';
+            p.dataset.animated = "true";
+
+            text.split('').forEach((char, i) => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.style.animationDelay = `${i * 0.04}s`;
+                p.appendChild(span);
+            });
+        }
+
+        // 4. Generate Stars
+        const starField = document.getElementById('star-field');
+        for(let i=0; i<50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            starField.appendChild(star);
+        }
+
+        // Support for mobile touch (Simple version)
+        let touchStart = 0;
+        window.addEventListener('touchstart', e => touchStart = e.touches[0].clientX);
+        window.addEventListener('touchmove', e => {
+            const delta = touchStart - e.touches[0].clientX;
+            targetScroll += delta * 2;
+            touchStart = e.touches[0].clientX;
+            const maxScroll = (pages.length - 1) * window.innerWidth;
+            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+        });
+
+    </script>
+</body>
+</html>
