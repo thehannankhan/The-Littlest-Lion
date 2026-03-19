@@ -4,24 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Littlest Lion - Adventure Edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 
     <style>
         :root {
-            --bg-color: #110f5d;
+            --navy: #110f5d;
+            --white: #ffffff;
+            --transition-speed: 1.2s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden; /* Lock standard scroll */
-            background-color: var(--bg-color);
-            font-family: 'Palatino', 'Georgia', serif;
+            overflow: hidden; /* We handle scrolling via JS */
+            background-color: var(--navy);
+            font-family: 'Georgia', serif;
+            color: var(--white);
+        }
+        h1 {
+            color: gold;
+            font-family: "MedievalSharp";
         }
 
-        /* The Main Horizontal Container */
+        /* --- Layout --- */
         .p-storybook__wrapper {
             display: flex;
             height: 100vh;
@@ -38,9 +52,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            perspective: 1200px;
         }
 
-        /* Page Content Layers */
+        /* --- 3D Effects & Parallax --- */
         .p-page {
             width: 100%;
             height: 100%;
@@ -61,17 +76,14 @@
             object-fit: cover;
         }
 
-        /* Shadow Overlay for Depth */
         .p-page__bg::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle, transparent 20%, var(--bg-color) 150%);
-            transition: opacity 1.5s ease;
+            background: radial-gradient(circle, transparent 20%, var(--navy) 140%);
             z-index: 2;
         }
 
-        /* 3D Objects */
         .p-page__object {
             position: absolute;
             inset: 0;
@@ -80,65 +92,97 @@
             align-items: center;
             z-index: 3;
             opacity: 0;
-            transform: translate3d(0, 100px, -200px) scale(0.8);
-            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translate3d(0, 80px, -300px);
+            transition: all var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Active State Animations */
-        .p-storybook__page.is-active .p-page__object {
+        /* The NEW Foreground object: Centrered Lion */
+        .p-page__foreground {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            /* Starts hidden in extreme foreground with higher z-depth */
+            transform: translate3d(-50%, -50%, 600px);
+            z-index: 20; /* very high z-index to stay above background layers */
+            opacity: 0;
+            transition: all var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
+            width: auto;
+            height: 40vh; /* scaled appropriately for foreground focus */
+        }
+
+        /* Position the image inside the foreground container */
+        .p-page__foreground img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Triggered when page is active */
+        .p-storybook__page.is-active .p-page__object,
+        .p-storybook__page.is-active .p-page__foreground {
             opacity: 1;
-            transform: translate3d(0, 0, 0) scale(1);
+            /* New active transform moves them to final depth */
+            transform: translate3d(-50%, -50%, 100px);
         }
 
-        /* Text Styling */
+        /* Background objects have different z-depth from foreground */
+        .p-storybook__page.is-active .p-page__object {
+            transform: translate3d(0, 0, 0);
+        }
+
+        /* --- Text Animation (The Space Fix) --- */
         .p-storybook__page-text {
             position: absolute;
-            bottom: 12%;
-            left: 10%;
-            right: 10%;
+            bottom: 15%;
+            width: 100%;
             text-align: center;
             z-index: 10;
-            color: white;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 1s delay 0.5s;
             pointer-events: none;
-        }
-
-        .p-storybook__page.is-active .p-storybook__page-text {
-            opacity: 1;
-            transform: translateY(0);
+            padding: 0 50px;
         }
 
         .p-storybook__page-text p {
-            font-size: 2rem;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
-            margin: 0;
+            font-size: 2.2rem;
             line-height: 1.4;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
         }
 
+        /* Key Fix: white-space pre ensures spaces occupy width */
         .p-storybook__page-text span {
-            opacity: 0;
             display: inline-block;
-            animation: letter-fade 0.4s forwards;
+            white-space: pre; 
+            opacity: 0;
+            transform: translateY(15px);
+            filter: blur(5px);
+            animation: reveal-text 0.6s forwards;
         }
 
-        @keyframes letter-fade {
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes reveal-text {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
         }
 
-        /* Cover & End Pages */
+        /* --- UI Elements --- */
         .cover-content {
             text-align: center;
-            color: white;
             z-index: 5;
         }
 
-        .cover-content h1 { font-size: 5rem; margin-bottom: 10px; }
-        .cover-content p { font-size: 1.5rem; opacity: 0.7; }
+        .cover-content h1 {
+            font-size: 5rem;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
 
-        /* Stars Background */
-        .sky { position: absolute; inset: 0; pointer-events: none; }
+        .sky {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
         .star {
             position: absolute;
             width: 2px;
@@ -150,6 +194,13 @@
 
         @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
+        .lottie-container {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+        }
     </style>
 </head>
 <body>
@@ -160,20 +211,24 @@
             <div class="sky" id="star-field"></div>
             <div class="cover-content">
                 <h1>The Littlest Lion</h1>
-                <p>Scroll down or use your wheel to explore</p>
+                <p>The Journey of Little Leo!</p>
+                <p style="margin-top: 40px; font-size: 1rem; opacity: 0.6;">Scroll to begin</p>
             </div>
         </section>
 
         <section class="p-storybook__page">
             <div class="p-page">
                 <div class="p-page__bg">
-                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page1/%E8%83%8C%E6%99%AF.png?raw=true" alt="Forest">
+                    <img src="Assets/bg0.jpg" alt="">
                 </div>
                 <div class="p-page__object">
-                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page1/%E4%BA%BA%E7%89%A9.png?raw=true" alt="Lion">
+                    <img src="" alt="">
+                </div>
+                <div class="p-page__foreground p-page__foreground-lion">
+                    <img src="Assets/LionsStork.png" alt="A playful lion cub centered in the frame.">
                 </div>
                 <div class="p-storybook__page-text">
-                    <p>In a hidden corner of the world, a tiny lion began a journey that would change everything.</p>
+                    <p>Once, in a hidden glade, a tiny lion discovered that being small was his greatest strength.</p>
                 </div>
             </div>
         </section>
@@ -181,13 +236,16 @@
         <section class="p-storybook__page">
             <div class="p-page">
                 <div class="p-page__bg">
-                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page2/%E8%83%8C%E6%99%AF.png?raw=true" alt="River">
+                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page2/%E8%83%8C%E6%99%AF.png?raw=true" alt="">
                 </div>
                 <div class="p-page__object">
-                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page2/%E6%A1%83%E5%A4%AA%E9%83%8E.png?raw=true" alt="Momotaro">
+                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page2/%E6%A1%83%E5%A4%AA%E9%83%8E.png?raw=true" alt="">
+                </div>
+                <div class="p-page__foreground p-page__foreground-lion">
+                    <img src="Assets/Lioness01.png" alt="A playful lion cub centered in the frame.">
                 </div>
                 <div class="p-storybook__page-text">
-                    <p>He met Momotaro, the brave Peach Boy, who carried dumplings for strength and kindness in his heart.</p>
+                    <p>He met Momotaro, the brave Peach Boy, who shared stories of islands and ogres.</p>
                 </div>
             </div>
         </section>
@@ -195,13 +253,16 @@
         <section class="p-storybook__page">
             <div class="p-page">
                 <div class="p-page__bg">
-                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page3/%E8%83%8C%E6%99%AF.png?raw=true" alt="Clouds">
+                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page3/%E8%83%8C%E6%99%AF.png?raw=true" alt="">
                 </div>
                 <div class="p-page__object">
-                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page3/%E8%94%A6.png?raw=true" alt="Beanstalk">
+                    <img src="https://github.com/hayuse-mochiya/code_pen_challenge/blob/feature/scroll/codepen/src/assets/image/page3/%E8%94%A6.png?raw=true" alt="">
+                </div>
+                <div class="p-page__foreground p-page__foreground-lion">
+                    <img src="Assets/StorkBaby.png" alt="A playful lion cub centered in the frame.">
                 </div>
                 <div class="p-storybook__page-text">
-                    <p>High above the clouds, Jack showed him that even the smallest explorer can reach the tallest heights.</p>
+                    <p>Together, they climbed the vines of legend, reaching for the very crown of the sky.</p>
                 </div>
             </div>
         </section>
@@ -209,10 +270,13 @@
         <section class="p-storybook__page">
             <div class="p-page">
                 <div class="p-page__bg">
-                    <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1920&q=80" alt="Village">
+                    <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=80" alt="Magic Forest">
+                </div>
+                <div class="p-page__foreground p-page__foreground-lion">
+                    <img src="Assets/LionFamily.png" alt="A playful lion cub centered in the frame.">
                 </div>
                 <div class="p-storybook__page-text">
-                    <p>In a bustling village, a clever tailor proved that wit is far mightier than the strength of a giant.</p>
+                    <p>Deep within the ancient thorns, they found a path that only the pure of heart could see.</p>
                 </div>
             </div>
         </section>
@@ -220,18 +284,24 @@
         <section class="p-storybook__page">
             <div class="p-page">
                 <div class="p-page__bg">
-                    <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1920&q=80" alt="Lake">
+                    <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80" alt="Lake">
+                </div>
+                <div class="p-page__foreground p-page__foreground-lion">
+                    <img src="image_0.png" alt="A playful lion cub centered in the frame.">
                 </div>
                 <div class="p-storybook__page-text">
-                    <p>A simple act of sharing led to a golden goose, proving that those with kind souls are the truly wealthy ones.</p>
+                    <p>At the edge of the world, they watched the moon rise over a lake made of liquid starlight.</p>
                 </div>
             </div>
         </section>
 
         <section class="p-storybook__page">
             <div class="cover-content">
-                <h1>Sweet Dreams</h1>
-                <p>The adventure never truly ends as long as you keep dreaming.</p>
+                <h1 style="font-size: 4rem;">And so, a new story begins...</h1>
+                <p>Sweet dreams, little hero.</p>
+            </div>
+            <div class="p-page__foreground p-page__foreground-lion">
+                <img src="image_0.png" alt="A playful lion cub centered in the frame.">
             </div>
         </section>
 
@@ -240,42 +310,36 @@
     <script>
         const wrapper = document.getElementById('master-wrapper');
         const pages = document.querySelectorAll('.p-storybook__page');
-        let currentScroll = 0;
-        let targetScroll = 0;
-        const scrollSpeed = 0.8; // Adjust for sensitivity
+        let currentX = 0;
+        let targetX = 0;
 
-        // 1. Horizontal Scroll Mapping (Core Fix)
+        // 1. Smooth Scroll Mapping
         window.addEventListener('wheel', (e) => {
             e.preventDefault();
             const maxScroll = (pages.length - 1) * window.innerWidth;
             
-            // Add vertical delta to our target horizontal position
-            targetScroll += e.deltaY;
+            // Adjust sensitivity (deltaY)
+            targetX += e.deltaY * 1.5; 
             
-            // Constrain boundaries
-            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+            // Boundary clamping
+            targetX = Math.max(0, Math.min(targetX, maxScroll));
         }, { passive: false });
 
-        // Smooth Lerp Loop
-        function update() {
-            // Smoothly interpolate current scroll to target scroll
-            currentScroll += (targetScroll - currentScroll) * 0.1;
-            
-            // Apply the transformation
-            wrapper.style.transform = `translateX(-${currentScroll}px)`;
-            
-            requestAnimationFrame(update);
+        // Animation Loop (Lerp)
+        function updateScroll() {
+            currentX += (targetX - currentX) * 0.08; // 0.08 = smoothness
+            wrapper.style.transform = `translateX(-${currentX}px)`;
+            requestAnimationFrame(updateScroll);
         }
-        update();
+        updateScroll();
 
-        // 2. Intersection Observer for Page Activations
+        // 2. Intersection Observer for Triggers
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-active');
-                    runTypingAnimation(entry.target);
+                    animateText(entry.target);
                 } else {
-                    // We remove active class so animations can replay when coming back
                     entry.target.classList.remove('is-active');
                 }
             });
@@ -283,18 +347,21 @@
 
         pages.forEach(page => observer.observe(page));
 
-        // 3. Typing Effect
-        function runTypingAnimation(page) {
+        // 3. The Typing Animation (Space Fix Included)
+        function animateText(page) {
             const p = page.querySelector('.p-storybook__page-text p');
-            if (!p || p.dataset.animated) return;
+            if (!p || p.dataset.animated === "true") return;
 
-            const text = p.innerText;
+            const originalText = p.innerText;
             p.innerHTML = '';
             p.dataset.animated = "true";
 
-            text.split('').forEach((char, i) => {
+            originalText.split('').forEach((char, i) => {
                 const span = document.createElement('span');
-                span.textContent = char;
+                
+                // If it's a space, use a non-breaking space character to ensure it occupies width
+                span.textContent = char === ' ' ? '\u00A0' : char;
+                
                 span.style.animationDelay = `${i * 0.04}s`;
                 p.appendChild(span);
             });
@@ -302,24 +369,24 @@
 
         // 4. Generate Stars
         const starField = document.getElementById('star-field');
-        for(let i=0; i<50; i++) {
+        for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 5 + 's';
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 5}s`;
             starField.appendChild(star);
         }
 
-        // Support for mobile touch (Simple version)
-        let touchStart = 0;
-        window.addEventListener('touchstart', e => touchStart = e.touches[0].clientX);
+        // Mobile Touch Support
+        let startX = 0;
+        window.addEventListener('touchstart', e => startX = e.touches[0].clientX);
         window.addEventListener('touchmove', e => {
-            const delta = touchStart - e.touches[0].clientX;
-            targetScroll += delta * 2;
-            touchStart = e.touches[0].clientX;
-            const maxScroll = (pages.length - 1) * window.innerWidth;
-            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+            const deltaX = startX - e.touches[0].clientX;
+            targetX += deltaX * 2;
+            startX = e.touches[0].clientX;
+            const max = (pages.length - 1) * window.innerWidth;
+            targetX = Math.max(0, Math.min(targetX, max));
         });
 
     </script>
