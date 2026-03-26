@@ -14,7 +14,6 @@
             --navy: #0a092d;
             --white: #ffffff;
             --gold: #ffd700;
-            --transition-speed: 1.2s;
         }
 
         * {
@@ -136,58 +135,63 @@
         /* --- Subtitles with Nav Buttons --- */
         .p-storybook__page-text {
             position: absolute;
-            bottom: 30px;
+            bottom: 40px;
             left: 0;
             right: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             z-index: 100;
-            padding: 0 20px;
-            pointer-events: none; /* Allows swipe on the text area */
+            padding: 0 10px;
+            pointer-events: none;
         }
 
         .p-storybook__page-text p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             line-height: 1.4;
             background: rgba(0, 0, 0, 0.6);
             padding: 10px 16px;
             border-radius: 6px;
             max-width: 600px;
             text-align: center;
-            pointer-events: auto; /* Allow text to be picked up by observer but not block buttons */
+            pointer-events: auto;
         }
 
-        /* Navigation Buttons */
+        /* Navigation Buttons - Circle Fix */
         .nav-arrow {
-            width: 45px;
-            height: 45px;
-            background: rgba(255, 215, 0, 0.2);
+            width: 50px;
+            height: 50px;
+            min-width: 50px; /* Forces circle on mobile */
+            min-height: 50px;
+            flex-shrink: 0; /* Prevents squishing */
+            background: rgba(255, 215, 0, 0.15);
             border: 2px solid var(--gold);
             border-radius: 50%;
             color: var(--gold);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            pointer-events: auto; /* CRITICAL: Enables clicking */
+            pointer-events: auto;
             transition: all 0.3s ease;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+            text-decoration: none;
+            line-height: 0;
         }
 
-        .nav-arrow:hover {
+        .nav-arrow:active {
+            transform: scale(0.9);
             background: var(--gold);
             color: var(--navy);
-            transform: scale(1.1);
         }
 
-        .nav-arrow.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
+        @media (min-width: 768px) {
+            .p-storybook__page-text { gap: 30px; bottom: 50px; }
+            .p-storybook__page-text p { font-size: 1.2rem; }
+            .nav-arrow { width: 60px; height: 60px; min-width: 60px; }
         }
 
         .p-storybook__page-text span {
@@ -254,11 +258,10 @@
             <div class="cover-content">
                 <h1>The Littlest Lion</h1>
                 <p>A 1st Birthday Adventure</p>
-                <p style="margin-top: 40px; font-size: 0.9rem; opacity: 0.6;">Swipe, Scroll or Click to Begin</p>
+                <p style="margin-top: 40px; font-size: 0.9rem; opacity: 0.6;">Click the arrow to begin</p>
             </div>
             <div class="p-storybook__page-text">
-                <button class="nav-arrow prev-btn hidden" onclick="navigatePage(-1)">&#8249;</button>
-                <div style="width: 100px;"></div> <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
+                <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
             </div>
         </section>
 
@@ -344,8 +347,6 @@
                 </div>
                 <div class="p-storybook__page-text">
                     <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
-                    <div style="width: 100px;"></div>
-                    <button class="nav-arrow next-btn hidden" onclick="navigatePage(1)">&#8250;</button>
                 </div>
             </div>
         </section>
@@ -364,7 +365,7 @@
             audioDiv.innerHTML = `<iframe width="100" height="100" src="https://www.youtube.com/embed/TuqbNaY7o6s?autoplay=1&loop=1&playlist=TuqbNaY7o6s&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>`;
         });
 
-        // --- Scrolling & Touch Logic ---
+        // --- Scrolling Logic ---
         const wrapper = document.getElementById('master-wrapper');
         const pages = document.querySelectorAll('.p-storybook__page');
         let currentX = 0;
@@ -372,7 +373,6 @@
         let touchStartX = 0;
         let currentPageIndex = 0;
 
-        // Desktop Scroll
         window.addEventListener('wheel', (e) => {
             e.preventDefault();
             const maxScroll = (pages.length - 1) * window.innerWidth;
@@ -380,7 +380,6 @@
             targetX = Math.max(0, Math.min(targetX, maxScroll));
         }, { passive: false });
 
-        // Mobile Touch
         window.addEventListener('touchstart', (e) => {
             touchStartX = e.touches[0].clientX;
         }, { passive: true });
@@ -394,7 +393,6 @@
             targetX = Math.max(0, Math.min(targetX, maxScroll));
         }, { passive: false });
 
-        // Click Navigation Logic
         window.navigatePage = function(direction) {
             const maxPages = pages.length - 1;
             currentPageIndex = Math.max(0, Math.min(currentPageIndex + direction, maxPages));
@@ -404,10 +402,7 @@
         function updateScroll() {
             currentX += (targetX - currentX) * 0.08;
             wrapper.style.transform = `translateX(-${currentX}px)`;
-            
-            // Sync the manual index based on scroll position
             currentPageIndex = Math.round(currentX / window.innerWidth);
-            
             requestAnimationFrame(updateScroll);
         }
         updateScroll();
@@ -442,7 +437,6 @@
             });
         }
 
-        // --- Star Generation ---
         const starField = document.getElementById('star-field');
         for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
