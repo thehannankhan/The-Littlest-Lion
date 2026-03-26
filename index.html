@@ -13,6 +13,7 @@
         :root {
             --navy: #0a092d;
             --white: #ffffff;
+            --gold: #ffd700;
             --transition-speed: 1.2s;
         }
 
@@ -29,12 +30,11 @@
             background-color: var(--navy);
             font-family: 'Open Sans', sans-serif;
             color: var(--white);
-            /* Prevents mobile browser pull-to-refresh */
             touch-action: none; 
         }
 
         h1 {
-            color: gold;
+            color: var(--gold);
             font-family: "MedievalSharp", serif;
         }
 
@@ -55,7 +55,7 @@
             padding: 15px 40px;
             font-size: 1.5rem;
             font-family: 'MedievalSharp';
-            background: gold;
+            background: var(--gold);
             border: none;
             border-radius: 50px;
             cursor: pointer;
@@ -128,23 +128,24 @@
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
         }
 
-        /* Active State for Center Image */
         .is-active .p-page__center-image {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
         }
 
-        /* --- Responsive Subtitles --- */
+        /* --- Subtitles with Nav Buttons --- */
         .p-storybook__page-text {
             position: absolute;
             bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 700px;
-            text-align: center;
-            z-index: 10;
-            pointer-events: none;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            z-index: 100;
+            padding: 0 20px;
+            pointer-events: none; /* Allows swipe on the text area */
         }
 
         .p-storybook__page-text p {
@@ -153,8 +154,40 @@
             background: rgba(0, 0, 0, 0.6);
             padding: 10px 16px;
             border-radius: 6px;
-            display: inline-block;
-            font-weight: 400;
+            max-width: 600px;
+            text-align: center;
+            pointer-events: auto; /* Allow text to be picked up by observer but not block buttons */
+        }
+
+        /* Navigation Buttons */
+        .nav-arrow {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            color: var(--gold);
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            pointer-events: auto; /* CRITICAL: Enables clicking */
+            transition: all 0.3s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-arrow:hover {
+            background: var(--gold);
+            color: var(--navy);
+            transform: scale(1.1);
+        }
+
+        .nav-arrow.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         .p-storybook__page-text span {
@@ -216,76 +249,90 @@
 
     <div class="p-storybook__wrapper" id="master-wrapper">
         
-        <section class="p-storybook__page">
+        <section class="p-storybook__page" data-index="0">
             <div class="sky" id="star-field"></div>
             <div class="cover-content">
                 <h1>The Littlest Lion</h1>
                 <p>A 1st Birthday Adventure</p>
-                <p style="margin-top: 40px; font-size: 0.9rem; opacity: 0.6;">Swipe or scroll to open</p>
+                <p style="margin-top: 40px; font-size: 0.9rem; opacity: 0.6;">Swipe, Scroll or Click to Begin</p>
+            </div>
+            <div class="p-storybook__page-text">
+                <button class="nav-arrow prev-btn hidden" onclick="navigatePage(-1)">&#8249;</button>
+                <div style="width: 100px;"></div> <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
             </div>
         </section>
 
-        <section class="p-storybook__page">
+        <section class="p-storybook__page" data-index="1">
             <div class="p-page">
                 <div class="p-page__bg"><img src="Assets/bg0.jpg" alt=""></div>
                 <div class="p-page__center-image">
                     <img src="Assets/LionsStork.png" alt="Little Leo and the Stork">
                 </div>
                 <div class="p-storybook__page-text">
+                    <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
                     <p>Once, in a hidden glade, a tiny lion discovered that being small was his greatest strength.</p>
+                    <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
                 </div>
             </div>
         </section>
 
-        <section class="p-storybook__page">
+        <section class="p-storybook__page" data-index="2">
             <div class="p-page">
                 <div class="p-page__bg"><img src="Assets/bg1.jpg" alt=""></div>
                 <div class="p-page__center-image">
                     <img src="Assets/Lioness01.png" alt="Little Leo's Mother">
                 </div>
                 <div class="p-storybook__page-text">
+                    <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
                     <p>He met Momotaro, the brave Peach Boy, who shared stories of islands and ogres.</p>
+                    <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
                 </div>
             </div>
         </section>
 
-        <section class="p-storybook__page">
+        <section class="p-storybook__page" data-index="3">
             <div class="p-page">
                 <div class="p-page__bg"><img src="Assets/bg2.jpg" alt=""></div>
                 <div class="p-page__center-image">
                     <img src="Assets/StorkBaby.png" alt="The Journey Continues">
                 </div>
                 <div class="p-storybook__page-text">
+                    <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
                     <p>Together, they climbed the vines of legend, reaching for the very crown of the sky.</p>
+                    <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
                 </div>
             </div>
         </section>
 
-        <section class="p-storybook__page">
+        <section class="p-storybook__page" data-index="4">
             <div class="p-page">
                 <div class="p-page__bg"><img src="Assets/bg3.jpg" alt=""></div>
                 <div class="p-page__center-image">
                     <img src="Assets/LionFamily.png" alt="The Lion Family">
                 </div>
                 <div class="p-storybook__page-text">
+                    <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
                     <p>Deep within the ancient thorns, they found a path that only the pure of heart could see.</p>
+                    <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
                 </div>
             </div>
         </section>
 
-        <section class="p-storybook__page">
+        <section class="p-storybook__page" data-index="5">
             <div class="p-page">
                 <div class="p-page__bg"><img src="Assets/bgX.png" alt=""></div>
                 <div class="p-page__center-image">
                     <img src="Assets/AuntyLion.png" alt="Aunty Lion">
                 </div>
                 <div class="p-storybook__page-text">
-                    <p>Deep within the ancient thorns, they found a path that only the pure of heart could see.</p>
+                    <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
+                    <p>Within the golden fields, they shared laughs and stories with family near and far.</p>
+                    <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
                 </div>
             </div>
         </section>
 
-        <section class="p-storybook__page">
+        <section class="p-storybook__page" data-index="6">
             <div class="p-page">
                 <div class="p-page__bg"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80" alt=""></div>
                 <div class="p-page__center-image" style="width: 50%;">
@@ -295,22 +342,25 @@
                     <h1>Happy Birthday!</h1>
                     <p>And so, a new story begins...</p>
                 </div>
+                <div class="p-storybook__page-text">
+                    <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
+                    <div style="width: 100px;"></div>
+                    <button class="nav-arrow next-btn hidden" onclick="navigatePage(1)">&#8250;</button>
+                </div>
             </div>
         </section>
 
     </div>
 
     <script>
-        // --- YouTube Audio Logic (Mobile Optimized) ---
+        // --- YouTube Audio Logic ---
         const startBtn = document.getElementById('start-btn');
         const overlay = document.getElementById('audio-overlay');
         
         startBtn.addEventListener('click', () => {
             overlay.style.opacity = '0';
             setTimeout(() => overlay.style.display = 'none', 500);
-            
             const audioDiv = document.getElementById('youtube-audio');
-            // Using a slightly different embed format that mobile browsers respect more
             audioDiv.innerHTML = `<iframe width="100" height="100" src="https://www.youtube.com/embed/TuqbNaY7o6s?autoplay=1&loop=1&playlist=TuqbNaY7o6s&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>`;
         });
 
@@ -320,6 +370,7 @@
         let currentX = 0;
         let targetX = 0;
         let touchStartX = 0;
+        let currentPageIndex = 0;
 
         // Desktop Scroll
         window.addEventListener('wheel', (e) => {
@@ -337,21 +388,31 @@
         window.addEventListener('touchmove', (e) => {
             const touchX = e.touches[0].clientX;
             const deltaX = touchStartX - touchX;
-            touchStartX = touchX; // Update start for smooth continuous drag
-
+            touchStartX = touchX;
             const maxScroll = (pages.length - 1) * window.innerWidth;
-            targetX += deltaX * 2.5; // Sensitivity boost for mobile
+            targetX += deltaX * 2.5;
             targetX = Math.max(0, Math.min(targetX, maxScroll));
         }, { passive: false });
+
+        // Click Navigation Logic
+        window.navigatePage = function(direction) {
+            const maxPages = pages.length - 1;
+            currentPageIndex = Math.max(0, Math.min(currentPageIndex + direction, maxPages));
+            targetX = currentPageIndex * window.innerWidth;
+        };
 
         function updateScroll() {
             currentX += (targetX - currentX) * 0.08;
             wrapper.style.transform = `translateX(-${currentX}px)`;
+            
+            // Sync the manual index based on scroll position
+            currentPageIndex = Math.round(currentX / window.innerWidth);
+            
             requestAnimationFrame(updateScroll);
         }
         updateScroll();
 
-        // --- Intersection Observer (Triggers Image Reveal) ---
+        // --- Intersection Observer ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -365,7 +426,6 @@
 
         pages.forEach(page => observer.observe(page));
 
-        // --- Typing Animation (Space Fix) ---
         function animateText(page) {
             const p = page.querySelector('.p-storybook__page-text p');
             if (!p || p.dataset.animated === "true") return;
@@ -384,15 +444,13 @@
 
         // --- Star Generation ---
         const starField = document.getElementById('star-field');
-        if(starField) {
-            for (let i = 0; i < 60; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.top = `${Math.random() * 100}%`;
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.animationDelay = `${Math.random() * 5}s`;
-                starField.appendChild(star);
-            }
+        for (let i = 0; i < 60; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            starField.appendChild(star);
         }
     </script>
 </body>
