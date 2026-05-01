@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Littlest Lion - Adventure Edition</title>
-    
+    <link rel="apple-touch-icon" sizes="128x128" href="Assets/icon.png">
+    <link rel="icon" type="image/x-icon" href="Assets/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
             --navy: #0a092d;
@@ -22,14 +27,15 @@
             padding: 0;
         }
 
-        body, html {
+        body,
+        html {
             width: 100%;
             height: 100%;
             overflow: hidden;
             background-color: var(--navy);
             font-family: 'Open Sans', sans-serif;
             color: var(--white);
-            touch-action: none; 
+            touch-action: none;
         }
 
         h1 {
@@ -124,7 +130,7 @@
         .p-page__center-image img {
             width: 100%;
             height: auto;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
         }
 
         .is-active .p-page__center-image {
@@ -162,9 +168,11 @@
         .nav-arrow {
             width: 50px;
             height: 50px;
-            min-width: 50px; /* Forces circle on mobile */
+            min-width: 50px;
+            /* Forces circle on mobile */
             min-height: 50px;
-            flex-shrink: 0; /* Prevents squishing */
+            flex-shrink: 0;
+            /* Prevents squishing */
             background: rgba(255, 215, 0, 0.15);
             border: 2px solid var(--gold);
             border-radius: 50%;
@@ -189,21 +197,35 @@
         }
 
         @media (min-width: 768px) {
-            .p-storybook__page-text { gap: 30px; bottom: 50px; }
-            .p-storybook__page-text p { font-size: 1.2rem; }
-            .nav-arrow { width: 60px; height: 60px; min-width: 60px; }
+            .p-storybook__page-text {
+                gap: 30px;
+                bottom: 50px;
+            }
+
+            .p-storybook__page-text p {
+                font-size: 1.2rem;
+            }
+
+            .nav-arrow {
+                width: 60px;
+                height: 60px;
+                min-width: 60px;
+            }
         }
 
         .p-storybook__page-text span {
             display: inline-block;
-            white-space: pre; 
+            white-space: pre;
             opacity: 0;
             filter: blur(5px);
             animation: reveal-text 0.5s forwards;
         }
 
         @keyframes reveal-text {
-            to { opacity: 1; filter: blur(0); }
+            to {
+                opacity: 1;
+                filter: blur(0);
+            }
         }
 
         .cover-content {
@@ -219,10 +241,17 @@
         }
 
         @media (min-width: 768px) {
-            .cover-content h1 { font-size: 5rem; }
+            .cover-content h1 {
+                font-size: 5rem;
+            }
         }
 
-        .sky { position: absolute; inset: 0; pointer-events: none; }
+        .sky {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
         .star {
             position: absolute;
             width: 2px;
@@ -231,7 +260,18 @@
             border-radius: 50%;
             animation: twinkle 3s infinite ease-in-out;
         }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
 
         #youtube-audio {
             position: absolute;
@@ -242,6 +282,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div id="audio-overlay">
@@ -252,7 +293,7 @@
     <div id="youtube-audio"></div>
 
     <div class="p-storybook__wrapper" id="master-wrapper">
-        
+
         <section class="p-storybook__page" data-index="0">
             <div class="sky" id="star-field"></div>
             <div class="cover-content">
@@ -273,7 +314,7 @@
                 </div>
                 <div class="p-storybook__page-text">
                     <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
-                    <p>Once, in a hidden glade, a tiny lion discovered that being small was his greatest strength.</p>
+                    <p>In a jungle not so far away, Sid the Stork brought the Lion family some good news.</p>
                     <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
                 </div>
             </div>
@@ -287,7 +328,7 @@
                 </div>
                 <div class="p-storybook__page-text">
                     <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
-                    <p>He met Momotaro, the brave Peach Boy, who shared stories of islands and ogres.</p>
+                    <p>Mama Lion was to have a new cub.</p>
                     <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
                 </div>
             </div>
@@ -301,7 +342,7 @@
                 </div>
                 <div class="p-storybook__page-text">
                     <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
-                    <p>Together, they climbed the vines of legend, reaching for the very crown of the sky.</p>
+                    <p>Sid the stork delivered the cub to the Lion family.</p>
                     <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
                 </div>
             </div>
@@ -315,7 +356,7 @@
                 </div>
                 <div class="p-storybook__page-text">
                     <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
-                    <p>Deep within the ancient thorns, they found a path that only the pure of heart could see.</p>
+                    <p>Everyone gathered around to look at the new baby. They decided to call him Leo!</p>
                     <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
                 </div>
             </div>
@@ -323,9 +364,79 @@
 
         <section class="p-storybook__page" data-index="5">
             <div class="p-page">
-                <div class="p-page__bg"><img src="Assets/bgX.png" alt=""></div>
+                <div class="p-page__bg"><img src="Assets/bg5.jpg" alt=""></div>
                 <div class="p-page__center-image">
                     <img src="Assets/AuntyLion.png" alt="Aunty Lion">
+                </div>
+                <div class="p-storybook__page-text">
+                    <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
+                    <p>Aunty SeyEe booked a flight as soon as she heard the news.</p>
+                    <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-storybook__page" data-index="6">
+            <div class="p-page">
+                <div class="p-page__bg"><img src="Assets/bg4.jpg" alt=""></div>
+                <div class="p-page__center-image">
+                    <img src="Assets/BabyCrib.png" alt="Aunty Lion">
+                </div>
+                <div class="p-storybook__page-text">
+                    <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
+                    <p>Everyone wanted to see the cutest baby cub in the jungle. But Leo ran into a problem</p>
+                    <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-storybook__page" data-index="7">
+            <div class="p-page">
+                <div class="p-page__bg"><img src="Assets/bg6.jpg" alt=""></div>
+                <div class="p-page__center-image">
+                    <img src="Assets/BabyConfused.png" alt="Aunty Lion">
+                </div>
+                <div class="p-storybook__page-text">
+                    <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
+                    <p>Leo seemed to have lost his roar</p>
+                    <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-storybook__page" data-index="7">
+            <div class="p-page">
+                <div class="p-page__bg"><img src="Assets/bg6.jpg" alt=""></div>
+                <div class="p-page__center-image">
+                    <img src="Assets/BabyConfused.png" alt="Aunty Lion">
+                </div>
+                <div class="p-storybook__page-text">
+                    <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
+                    <p>Within the golden fields, they shared laughs and stories with family near and far.</p>
+                    <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-storybook__page" data-index="7">
+            <div class="p-page">
+                <div class="p-page__bg"><img src="Assets/bg6.jpg" alt=""></div>
+                <div class="p-page__center-image">
+                    <img src="Assets/BabyConfused.png" alt="Aunty Lion">
+                </div>
+                <div class="p-storybook__page-text">
+                    <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
+                    <p>Within the golden fields, they shared laughs and stories with family near and far.</p>
+                    <button class="nav-arrow next-btn" onclick="navigatePage(1)">&#8250;</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-storybook__page" data-index="7">
+            <div class="p-page">
+                <div class="p-page__bg"><img src="Assets/bg6.jpg" alt=""></div>
+                <div class="p-page__center-image">
+                    <img src="Assets/BabyConfused.png" alt="Aunty Lion">
                 </div>
                 <div class="p-storybook__page-text">
                     <button class="nav-arrow prev-btn" onclick="navigatePage(-1)">&#8249;</button>
@@ -337,7 +448,9 @@
 
         <section class="p-storybook__page" data-index="6">
             <div class="p-page">
-                <div class="p-page__bg"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80" alt=""></div>
+                <div class="p-page__bg"><img
+                        src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80"
+                        alt=""></div>
                 <div class="p-page__center-image" style="width: 50%;">
                     <img src="Assets/LionFamily.png" alt="Happy Endings">
                 </div>
@@ -357,7 +470,7 @@
         // --- YouTube Audio Logic ---
         const startBtn = document.getElementById('start-btn');
         const overlay = document.getElementById('audio-overlay');
-        
+
         startBtn.addEventListener('click', () => {
             overlay.style.opacity = '0';
             setTimeout(() => overlay.style.display = 'none', 500);
@@ -376,7 +489,7 @@
         window.addEventListener('wheel', (e) => {
             e.preventDefault();
             const maxScroll = (pages.length - 1) * window.innerWidth;
-            targetX += e.deltaY * 1.2; 
+            targetX += e.deltaY * 1.2;
             targetX = Math.max(0, Math.min(targetX, maxScroll));
         }, { passive: false });
 
@@ -393,7 +506,7 @@
             targetX = Math.max(0, Math.min(targetX, maxScroll));
         }, { passive: false });
 
-        window.navigatePage = function(direction) {
+        window.navigatePage = function (direction) {
             const maxPages = pages.length - 1;
             currentPageIndex = Math.max(0, Math.min(currentPageIndex + direction, maxPages));
             targetX = currentPageIndex * window.innerWidth;
@@ -448,4 +561,5 @@
         }
     </script>
 </body>
+
 </html>
