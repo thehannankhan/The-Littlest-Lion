@@ -565,20 +565,43 @@
         pages.forEach(page => observer.observe(page));
 
         function animateText(page) {
-            const p = page.querySelector('.p-storybook__page-text p');
-            if (!p || p.dataset.animated === "true") return;
+    const p = page.querySelector('.p-storybook__page-text p');
+    if (!p || p.dataset.animated === "true") return;
 
-            const originalText = p.innerText;
-            p.innerHTML = '';
-            p.dataset.animated = "true";
+    const originalText = p.innerText;
+    p.innerHTML = '';
+    p.dataset.animated = "true";
 
-            originalText.split('').forEach((char, i) => {
-                const span = document.createElement('span');
-                span.textContent = char === ' ' ? '\u00A0' : char;
-                span.style.animationDelay = `${i * 0.03}s`;
-                p.appendChild(span);
-            });
+    let charCount = 0; // Global count to keep animation timing consistent
+
+    // 1. Split by spaces to get individual words
+    const words = originalText.split(' ');
+
+    words.forEach((word, wordIndex) => {
+        // 2. Create a wrapper for the word to prevent splitting
+        const wordSpan = document.createElement('span');
+        wordSpan.className = 'word-wrapper';
+
+        // 3. Split the word into characters
+        word.split('').forEach((char) => {
+            const charSpan = document.createElement('span');
+            charSpan.textContent = char;
+            charSpan.style.animationDelay = `${charCount * 0.03}s`;
+            wordSpan.appendChild(charSpan);
+            charCount++;
+        });
+
+        p.appendChild(wordSpan);
+
+        // 4. Add a space after the word (unless it's the last word)
+        if (wordIndex < words.length - 1) {
+            const space = document.createElement('span');
+            space.innerHTML = '&nbsp;'; // Use non-breaking space
+            p.appendChild(space);
+            charCount++; 
         }
+    });
+}
 
         const starField = document.getElementById('star-field');
         for (let i = 0; i < 60; i++) {
